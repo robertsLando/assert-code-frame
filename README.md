@@ -1,5 +1,9 @@
 # assert-code-frame
 
+[![CI](https://github.com/robertsLando/assert-code-frame/actions/workflows/ci.yml/badge.svg)](https://github.com/robertsLando/assert-code-frame/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/assert-code-frame.svg)](https://www.npmjs.com/package/assert-code-frame)
+[![npm](https://img.shields.io/npm/dt/assert-code-frame.svg)](https://www.npmjs.com/package/assert-code-frame)
+
 Enhances Node.js's built-in `assert` module by printing a code frame along with the error message when an assertion fails. This makes it easier to identify the location of the failed assertion in your code.
 
 ## Installation
