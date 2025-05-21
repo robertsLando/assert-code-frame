@@ -34,7 +34,7 @@ function getCodeFrameFromStack(err: AssertionError): string {
       const codeFrame = codeFrameColumns(
         src,
         { start: { line: Number(line), column: Number(column) } },
-        { highlightCode, message: err.message }
+        { highlightCode, message: err.message },
       );
       return codeFrame;
     } catch (e) {
