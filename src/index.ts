@@ -5,10 +5,19 @@ import { codeFrameColumns } from "@babel/code-frame";
 
 const fileName = path.basename(__filename);
 
+
+function patchToString(err: AssertionError, codeFrame: string): void {
+  const originalToString = err.toString.bind(err);
+  codeFrame = codeFrame ? `\n\n${codeFrame}` : "";
+  err.toString = function toString() {
+    return `${originalToString()}${codeFrame}`;
+  };
+}
+
 /**
  * Extract the code frame from the stack trace ignoring internal Node, node_modules, and our own file
  */
-function addCodeFrameFromStack(err: AssertionError): void {
+function getCodeFrameFromStack(err: AssertionError): string {
   const stackLines = err.stack?.split("\n") ?? [];
 
   const callerFrame = stackLines.find((line) => {
@@ -36,12 +45,12 @@ function addCodeFrameFromStack(err: AssertionError): void {
         { start: { line: Number(line), column: Number(column) } },
         { highlightCode, message: err.message },
       );
-      err.message += `\n\n${codeFrame}`;
+      return codeFrame;
     } catch (e) {
-      err.message += `\n\nFailed to generate code frame: ${(e as Error).message}`;
+      return `Failed to generate code frame: ${(e as Error).message}`;
     }
   } else {
-    err.message += "\n\nCould not find source location in stack trace.";
+    return "Could not find source location in stack trace.";
   }
 }
 
@@ -58,8 +67,9 @@ const enhancedAssert: typeof assert = new Proxy(assert, {
       try {
         return (original as (...args: unknown[]) => unknown)(...args);
       } catch (err) {
-        if (err instanceof AssertionError) {
-          addCodeFrameFromStack(err);
+        if (err instanceof AssertionError) {      
+          const codeFrame = getCodeFrameFromStack(err);
+          patchToString(err, codeFrame);
         }
         throw err;
       }
