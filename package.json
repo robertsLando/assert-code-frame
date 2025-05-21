@@ -1,0 +1,74 @@
+{
+  "name": "assert-code-frame",
+  "version": "1.0.0",
+  "description": "Enhances Node.js's built-in assert module by printing a code frame along with the error message when an assertion fails.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node -r esbuild-register --test test/*.test.ts",
+    "lint": "eslint src/**/*.ts test/**/*.ts",
+    "lint:fix": "npm run lint -- --fix",
+    "release": "read -p 'GITHUB_TOKEN: ' GITHUB_TOKEN && export GITHUB_TOKEN=$GITHUB_TOKEN && release-it"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "git": {
+      "tagName": "v${version}",
+      "requireBranch": "main",
+      "commitMessage": "chore(release): ${version}"
+    },
+    "hooks": {
+      "before:init": [
+        "npm run build"
+      ]
+    },
+    "npm": {
+      "publish": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular",
+        "infile": "CHANGELOG.md"
+      }
+    }
+  },
+  "keywords": [
+    "assert",
+    "codeframe",
+    "testing",
+    "debugging"
+  ],
+  "files": [
+    "dist/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "author": "Daniel Lando <daniel.sorridi@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robertsLando/assert-code-frame.git"
+  },
+  "dependencies": {
+    "@babel/code-frame": "^7.27.1"
+  },
+  "devDependencies": {
+    "@types/babel__code-frame": "^7.0.6",
+    "@types/node": "^22.15.21",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "esbuild": "^0.25.4",
+    "esbuild-register": "^3.6.0",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">= 20"
+  }
+}
