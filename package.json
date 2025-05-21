@@ -1,6 +1,6 @@
 {
   "name": "assert-code-frame",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Enhances Node.js's built-in assert module by printing a code frame along with the error message when an assertion fails.",
   "main": "dist/index.js",
   "scripts": {
