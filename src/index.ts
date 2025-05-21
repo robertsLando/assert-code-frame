@@ -5,15 +5,6 @@ import { codeFrameColumns } from "@babel/code-frame";
 
 const fileName = path.basename(__filename);
 
-
-function patchToString(err: AssertionError, codeFrame: string): void {
-  const originalToString = err.toString.bind(err);
-  codeFrame = codeFrame ? `\n\n${codeFrame}` : "";
-  err.toString = function toString() {
-    return `${originalToString()}${codeFrame}`;
-  };
-}
-
 /**
  * Extract the code frame from the stack trace ignoring internal Node, node_modules, and our own file
  */
@@ -43,7 +34,7 @@ function getCodeFrameFromStack(err: AssertionError): string {
       const codeFrame = codeFrameColumns(
         src,
         { start: { line: Number(line), column: Number(column) } },
-        { highlightCode, message: err.message },
+        { highlightCode, message: err.message }
       );
       return codeFrame;
     } catch (e) {
@@ -67,9 +58,10 @@ const enhancedAssert: typeof assert = new Proxy(assert, {
       try {
         return (original as (...args: unknown[]) => unknown)(...args);
       } catch (err) {
-        if (err instanceof AssertionError) {      
+        if (err instanceof AssertionError) {
           const codeFrame = getCodeFrameFromStack(err);
-          patchToString(err, codeFrame);
+          // do not patch the message or the codeFrame would be missing when console.error(err)
+          err.stack += `\n\n${codeFrame}`;
         }
         throw err;
       }
