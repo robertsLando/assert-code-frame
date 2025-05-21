@@ -29,7 +29,7 @@ test("assert.deepStrictEqual with failure", (t) => {
     assert.ok(error instanceof AssertionError, "should throw AssertionError");
     assert.ok(error.message.startsWith(message), "message should match");
     assert.ok(
-        error.stack?.includes(
+      error.stack?.includes(
         "assert.deepStrictEqual({ a: 1 }, { a: 2 }, message);",
       ),
       "code frame should be present",
@@ -47,7 +47,7 @@ test("assert.ok with failure", (t) => {
     assert.ok(error instanceof AssertionError, "should throw AssertionError");
     assert.ok(error.message.startsWith(message), "message should match");
     assert.ok(
-        error.stack?.includes("assert.ok(false, message);"),
+      error.stack?.includes("assert.ok(false, message);"),
       "code frame should be present",
     );
     return;
